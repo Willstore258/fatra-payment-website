@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FATRA PAYMENT</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        fatra: {
+                            blue: '#0066FF',
+                            purple: '#6C5CE7',
+                            darkBg: '#0F172A',
+                            darkCard: '#1E293B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Inter & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-slate-900 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-gray-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <!-- Hamburger Menu Button (=) at top left -->
+                <button id="menu-btn" onclick="toggleSidebar()" aria-label="Buka Menu" class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div class="flex items-center gap-2 cursor-pointer" onclick="selectMenu('welcome')">
+                    <img src="https://lh3.googleusercontent.com/d/1_a9s-u8A49o7289yv37-f8WJ2gE3K1uH" alt="Logo Fatra Payment" class="w-9 h-9 rounded-xl object-cover shadow-md shadow-blue-500/20 border border-gray-200 dark:border-slate-700" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6C5CE7/ffffff?text=FP';">
+                    <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                        FATRA PAYMENT
+                    </span>
+                </div>
+            </div>
+
+            <!-- Dark / Light Theme Toggle -->
+            <button id="theme-btn" onclick="toggleTheme()" class="p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-amber-500 dark:text-amber-300 transition-all duration-200 flex items-center gap-2 px-3 text-sm font-medium">
+                <i id="theme-icon" class="fa-solid fa-moon"></i>
+                <span id="theme-text" class="hidden sm:inline">Gelap</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar Menu Drawer -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-white dark:bg-slate-800 z-50 transform -translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+        <div class="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="https://lh3.googleusercontent.com/d/1_a9s-u8A49o7289yv37-f8WJ2gE3K1uH" alt="Logo Fatra Payment" class="w-7 h-7 rounded-lg object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100x100/6C5CE7/ffffff?text=FP';">
+                <span class="font-bold text-lg text-gray-800 dark:text-white">Menu Pilihan</span>
+            </div>
+            <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500 dark:text-gray-400">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="selectMenu('welcome')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-700/60 text-gray-700 dark:text-gray-200 font-medium transition-all text-left">
+                <i class="fa-solid fa-house w-6 text-center text-blue-500"></i>
+                <span>Beranda</span>
+            </button>
+            <button onclick="selectMenu('dana')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-700/60 text-gray-700 dark:text-gray-200 font-medium transition-all text-left">
+                <div class="w-6 h-6 flex items-center justify-center rounded bg-sky-500 text-white font-bold text-xs">D</div>
+                <span>DANA</span>
+            </button>
+            <button onclick="selectMenu('gopay')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-emerald-50 dark:hover:bg-slate-700/60 text-gray-700 dark:text-gray-200 font-medium transition-all text-left">
+                <div class="w-6 h-6 flex items-center justify-center rounded bg-emerald-500 text-white font-bold text-xs">G</div>
+                <span>GoPay</span>
+            </button>
+            <button onclick="selectMenu('ovo')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-purple-50 dark:hover:bg-slate-700/60 text-gray-700 dark:text-gray-200 font-medium transition-all text-left">
+                <div class="w-6 h-6 flex items-center justify-center rounded bg-purple-600 text-white font-bold text-xs">O</div>
+                <span>OVO</span>
+            </button>
+            <button onclick="selectMenu('qris')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-50 dark:hover:bg-slate-700/60 text-gray-700 dark:text-gray-200 font-medium transition-all text-left">
+                <i class="fa-solid fa-qrcode w-6 text-center text-rose-500"></i>
+                <span>QRIS</span>
+            </button>
+            <div class="pt-3 border-t border-gray-100 dark:border-slate-700"></div>
+            <button onclick="selectMenu('admin')" class="menu-item w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-semibold transition-all text-left hover:bg-emerald-100 dark:hover:bg-emerald-900/50">
+                <i class="fa-brands fa-whatsapp w-6 text-center text-xl text-emerald-500"></i>
+                <span>Admin FATRA</span>
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-gray-200 dark:border-slate-700 text-xs text-center text-gray-500 dark:text-gray-400">
+            FATRA PAYMENT App
+        </div>
+    </aside>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-8 flex flex-col justify-between">
+
+        <!-- Dynamic Content Section -->
+        <div id="content-area" class="w-full transition-all duration-300">
+            
+            <!-- Default Welcome State -->
+            <div id="view-welcome" class="view-content text-center py-10 space-y-6">
+                <div class="inline-flex p-4 rounded-3xl bg-blue-50 dark:bg-slate-800/80 text-blue-600 dark:text-blue-400 mb-2 shadow-inner">
+                    <i class="fa-solid fa-hand-wave text-5xl animate-bounce"></i>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                    Selamat Datang Di FATRA PAYMENT 👋
+                </h1>
+                <p class="text-gray-600 dark:text-gray-300 max-w-md mx-auto text-base">
+                    Silakan klik tombol menu <b>(=)</b> di pojok kiri atas untuk memilih metode pembayaran atau menghubungi Admin.
+                </p>
+
+                <!-- Quick Action Buttons Grid -->
+                <div class="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-lg mx-auto">
+                    <button onclick="selectMenu('dana')" class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-xl bg-sky-500 text-white flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">D</div>
+                        <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">DANA</span>
+                    </button>
+                    <button onclick="selectMenu('gopay')" class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">G</div>
+                        <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">GoPay</span>
+                    </button>
+                    <button onclick="selectMenu('ovo')" class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">O</div>
+                        <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">OVO</span>
+                    </button>
+                    <button onclick="selectMenu('qris')" class="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-xl bg-rose-500 text-white flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">QRIS</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- DANA Section -->
+            <div id="view-dana" class="view-content hidden max-w-md mx-auto">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 space-y-6">
+                    <div class="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center font-extrabold text-lg">D</div>
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Payment DANA</h2>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 rounded-full">Aktif</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold block mb-1">Atas Nama (A/N)</label>
+                            <div class="p-3 bg-gray-50 dark:bg-slate-900 rounded-xl font-semibold text-gray-800 dark:text-gray-200 border border-gray-200/60 dark:border-slate-700">
+                                FAT** FISXXXX** S****
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold block mb-1">Nomor DANA</label>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="dana-number" value="081243219604" readonly class="w-full p-3 bg-gray-50 dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-mono font-bold text-lg rounded-xl border border-gray-200/60 dark:border-slate-700 focus:outline-none">
+                                <button onclick="copyToClipboard('081243219604', 'btn-dana-copy')" id="btn-dana-copy" class="px-5 py-3 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold rounded-xl transition-all shadow-md shadow-blue-500/20 shrink-0 flex items-center gap-2">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Salin No DANA</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GOPAY Section -->
+            <div id="view-gopay" class="view-content hidden max-w-md mx-auto">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 space-y-6">
+                    <div class="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-extrabold text-lg">G</div>
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Payment GoPay</h2>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 rounded-full">Belum Tersedia</span>
+                    </div>
+
+                    <div class="text-center py-6 space-y-3">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-amber-50 dark:bg-slate-700 text-amber-500 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 font-medium">Metode pembayaran GoPay belum tersedia saat ini.</p>
+                        <p class="text-xs text-gray-400">Silakan gunakan metode pembayaran DANA atau QRIS.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OVO Section -->
+            <div id="view-ovo" class="view-content hidden max-w-md mx-auto">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 space-y-6">
+                    <div class="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center font-extrabold text-lg">O</div>
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Payment OVO</h2>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 rounded-full">Belum Tersedia</span>
+                    </div>
+
+                    <div class="text-center py-6 space-y-3">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-amber-50 dark:bg-slate-700 text-amber-500 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 font-medium">Metode pembayaran OVO belum tersedia saat ini.</p>
+                        <p class="text-xs text-gray-400">Silakan gunakan metode pembayaran DANA atau QRIS.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QRIS Section -->
+            <div id="view-qris" class="view-content hidden max-w-md mx-auto">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 space-y-5 text-center">
+                    <div class="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-4 text-left">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Payment QRIS</h2>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Scan QRIS All Payment</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 rounded-full">Aktif</span>
+                    </div>
+
+                    <!-- QRIS Image Container -->
+                    <div class="p-3 bg-gray-50 dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 flex flex-col items-center justify-center overflow-hidden">
+                        <img 
+                            src="https://s3.ireng.uk/1794549946311-file_1794549945080.jpeg" 
+                            alt="QRIS Payment FATRA" 
+                            class="max-w-full h-auto rounded-xl object-contain shadow-md hover:scale-[1.02] transition-transform duration-300 max-h-80"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x400/0066FF/ffffff?text=Gambar+QRIS+FATRA';"
+                        >
+                    </div>
+
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        Scan menggunakan DANA, GoPay, OVO, ShopeePay, BCA, atau aplikasi perbankan lainnya.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ADMIN FATRA Section -->
+            <div id="view-admin" class="view-content hidden max-w-md mx-auto">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-slate-700 text-center space-y-6">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-500 flex items-center justify-center text-3xl">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Admin FATRA PAYMENT</h2>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Butuh bantuan atau mau kirim bukti transfer?</p>
+                    </div>
+
+                    <a 
+                        href="https://wa.me/6289636633462" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="w-full inline-flex items-center justify-center gap-3 py-4 px-6 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-bold text-lg rounded-2xl shadow-lg shadow-emerald-500/25 transition-all duration-200"
+                    >
+                        <span>Chat WhatsApp ⬇️😉👋</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+                    </a>
+
+                    <div class="p-3 bg-gray-50 dark:bg-slate-900 rounded-xl text-xs text-gray-500 dark:text-gray-400 font-mono">
+                        No. WA: +62 896-3663-3462
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Rules Section (Cara Transfer) -->
+        <section class="mt-12 max-w-md mx-auto w-full bg-white dark:bg-slate-800/90 rounded-3xl p-6 shadow-md border border-gray-100 dark:border-slate-700/80">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-3">
+                <i class="fa-solid fa-circle-info text-blue-500"></i>
+                <span>Cara Transfer / Rules</span>
+            </h3>
+            <ul class="space-y-2.5 text-sm text-gray-600 dark:text-gray-300">
+                <li class="flex items-start gap-2.5">
+                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 font-bold text-xs shrink-0 mt-0.5">1</span>
+                    <span>Transfer Tinggal Pilih Di : (Dana, Gopay, Ovo, Qris)</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300 font-bold text-xs shrink-0 mt-0.5">2</span>
+                    <span>Sudah Transfer? Bawa Bukti Transfer Ke Admin Fatra</span>
+                </li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-gray-900 text-white dark:bg-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-medium">
+            <i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600 text-lg"></i>
+            <span id="toast-message">Nomor berhasil disalin!</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+        <div class="max-w-4xl mx-auto px-4">
+            © Fatra Payment - All Rights Reserved 2026/2027.
+        </div>
+    </footer>
+
+    <!-- Application Script Logic -->
+    <script>
+        // Sidebar Toggle Logic
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // View Navigation Switcher
+        function selectMenu(viewName) {
+            // Hide all views
+            const views = document.querySelectorAll('.view-content');
+            views.forEach(v => v.classList.add('hidden'));
+
+            // Show selected view
+            const selectedView = document.getElementById(`view-${viewName}`);
+            if (selectedView) {
+                selectedView.classList.remove('hidden');
+            }
+
+            // Close sidebar if open
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar.classList.contains('-translate-x-full')) {
+                toggleSidebar();
+            }
+
+            // Scroll top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Copy Text Function
+        function copyToClipboard(text, btnId) {
+            // Use execCommand fallback for strict browser iframe security
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast('Nomor DANA berhasil disalin!');
+            } catch (err) {
+                showToast('Gagal menyalin nomor');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // Custom Toast Notification
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // Theme Switcher Logic (Light & Dark Mode)
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (isDark) {
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'Cerah';
+                localStorage.setItem('fatra_theme', 'dark');
+            } else {
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'Gelap';
+                localStorage.setItem('fatra_theme', 'light');
+            }
+        }
+
+        // Initialize Theme Preference on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('fatra_theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-sun';
+                document.getElementById('theme-text').textContent = 'Cerah';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-moon';
+                document.getElementById('theme-text').textContent = 'Gelap';
+            }
+        });
+    </script>
+</body>
+</html>
